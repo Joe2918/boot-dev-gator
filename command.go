@@ -26,3 +26,20 @@ func handlerLogin(s *state, cmd command) error {
 	fmt.Printf("Login as %v successful", username)
 	return nil
 }
+
+func (c *commands) register(name string, f func(*state, command) error) {
+	c.handlers[name] = f
+}
+
+func (c *commands) run(s *state, cmd command) error {
+	function, ok := c.handlers[cmd.name]
+	if !ok {
+		return errors.New("command does not exist")
+	}
+
+	err := function(s, cmd)
+	if err != nil {
+		return err
+	}
+	return nil
+}
