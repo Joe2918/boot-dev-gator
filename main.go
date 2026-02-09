@@ -25,6 +25,10 @@ func main() {
 	fmt.Printf("Read config: %+v\n", cfg)
 
 	db, err := sql.Open("postgres", cfg.DbURL)
+	if err != nil {
+		log.Fatalf("error connecting to db: %v", err)
+	}
+	defer db.Close()
 	dbQueries := database.New(db)
 
 	programState := &state{
@@ -37,6 +41,7 @@ func main() {
 	}
 
 	cmds.register("login", handlerLogin)
+	cmds.register("register", handlerRegister)
 
 	args := os.Args
 	if len(args) < 2 {
@@ -53,7 +58,7 @@ func main() {
 
 	cfg, err = config.Read()
 	if err != nil {
-		log.Fatalf("erro reading config: %v", err)
+		log.Fatalf("error reading config: %v", err)
 	}
 	fmt.Printf("Read config again: %+v\n", cfg)
 }
