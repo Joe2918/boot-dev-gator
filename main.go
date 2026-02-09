@@ -1,14 +1,19 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
 	"os"
 
+	_ "github.com/lib/pq"
+
 	"github.com/bootdotdev/boot-dev-gator/internal/config"
+	"github.com/bootdotdev/boot-dev-gator/internal/database"
 )
 
 type state struct {
+	db  *database.Queries
 	cfg *config.Config
 }
 
@@ -19,7 +24,11 @@ func main() {
 	}
 	fmt.Printf("Read config: %+v\n", cfg)
 
+	db, err := sql.Open("postgres", cfg.DbURL)
+	dbQueries := database.New(db)
+
 	programState := &state{
+		db:  dbQueries,
 		cfg: &cfg,
 	}
 
