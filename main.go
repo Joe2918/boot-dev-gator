@@ -42,6 +42,7 @@ func main() {
 
 	cmds.register("login", handlerLogin)
 	cmds.register("register", handlerRegister)
+	cmds.register("reset", handlerReset)
 
 	args := os.Args
 	if len(args) < 2 {
@@ -55,10 +56,4 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	cfg, err = config.Read()
-	if err != nil {
-		log.Fatalf("error reading config: %v", err)
-	}
-	fmt.Printf("Read config again: %+v\n", cfg)
 }
