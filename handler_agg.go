@@ -4,9 +4,12 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/bootdotdev/boot-dev-gator/internal/database"
+	"github.com/google/uuid"
+	"github.com/lib/pq"
 )
 
 func handlerAgg(s *state, cmd command) error {
@@ -27,10 +30,11 @@ func handlerAgg(s *state, cmd command) error {
 	return nil
 }
 
-func scrapeFeeds(s *state) error {
+func scrapeFeeds(s *state) {
 	feedToFetch, err := s.db.GetNextFeedToFetch(context.Background())
 	if err != nil {
-		return err
+		log.Println("Couldn't get next feeds to fetch", err)
+		return
 	}
 
 	fetchedTime := sql.NullTime{
@@ -44,19 +48,49 @@ func scrapeFeeds(s *state) error {
 
 	err = s.db.MarkFeedFetched(context.Background(), args)
 	if err != nil {
-		return err
+		log.Printf("Couldn't mark feed %s fetched: %v", feedToFetch.Name, err)
+		return
 	}
 
 	feed, err := fetchFeed(context.Background(), feedToFetch.Url)
 	if err != nil {
-		return err
+		log.Printf("Couldn't collect feed %s: %v", feedToFetch.Name, err)
+		return
 	}
 
 	fmt.Println(feedToFetch.Name)
 	fmt.Println("=====================================")
 	for _, item := range feed.Channel.Item {
-		fmt.Println(item.Title)
+		description := sql.NullString{
+			String: item.Description,
+			Valid:  true,
+		}
+
+		pubTime, err := time.Parse("time.RFC3339", item.PubDate)
+
+		publishedTime := sql.NullTime{
+			Time:  pubTime,
+			Valid: true,
+		}
+
+		args := database.CreatePostParams{
+			ID:          uuid.New(),
+			Title:       item.Title,
+			Url:         item.Link,
+			Description: description,
+			PublishedAt: publishedTime,
+			FeedID:      feedToFetch.ID,
+		}
+		err = s.db.CreatePost(context.Background(), args)
+		if err != nil {
+			if pqErr, ok := err.(*pq.Error); ok {
+				if pqErr.Code == "23505" {
+					continue
+				}
+			}
+			log.Printf("Couldn't create post: %v", err)
+		}
 	}
 
-	return nil
+	log.Printf("Feed %s collected, %v posts found", feedToFetch.Name, len(feed.Channel.Item))
 }
