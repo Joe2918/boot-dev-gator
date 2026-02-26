@@ -8,8 +8,8 @@ import (
 
 	_ "github.com/lib/pq"
 
-	"github.com/bootdotdev/boot-dev-gator/internal/config"
-	"github.com/bootdotdev/boot-dev-gator/internal/database"
+	"github.com/Joe2918/boot-dev-gator/internal/config"
+	"github.com/Joe2918/boot-dev-gator/internal/database"
 )
 
 type state struct {

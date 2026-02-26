@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/bootdotdev/boot-dev-gator/internal/database"
+	"github.com/Joe2918/boot-dev-gator/internal/database"
 )
 
 func browsePosts(s *state, cmd command, user database.User) error {
