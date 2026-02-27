@@ -6,10 +6,7 @@ A multi-player command line tool for aggregating RSS feeds and viewing the posts
 
   Make sure you have the latest [Go toolchain](https://golang.org/dl/) installed as well as a local Postgres database.
 
-- [Go](https://go.dev/doc/install) 
-- [Postgres](https://www.postgresql.org/download/)
-
-###💾  Installation
+### 💾  Installation
 
 ### Via `go install` (Recommended)
 
