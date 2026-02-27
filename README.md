@@ -1,13 +1,15 @@
-# gator
+# Gator
 
-## Setup
+A multi-player command line tool for aggregating RSS feeds and viewing the posts.
 
-### 📋 Prerequisites
+## 📋 Prerequisites
+
+  Make sure you have the latest [Go toolchain](https://golang.org/dl/) installed as well as a local Postgres database.
 
 - [Go](https://go.dev/doc/install) 
 - [Postgres](https://www.postgresql.org/download/)
 
-### 💾  Installation
+###💾  Installation
 
 ### Via `go install` (Recommended)
 
@@ -17,51 +19,49 @@ With go 1.25 or higher:
 >>> go install github.com/Joe2918/boot-dev-gator@latest
 ```
 
-create a config file in your home directory, ~/.gatorconfig.json, with the following content:
-```
+## Config
+
+Create a `.gatorconfig.json` file in your home directory with the following structure:
+
+```json
 {
-  "db_url": "postgres://example"
+  "db_url": "postgres://username:@localhost:5432/database?sslmode=disable"
 }
 ```
 
+Replace the values with your database connection string.
+
 ## 🚀 Usage
 
-1. Register a user
+1. Create a new user
+
 ```bash
->>> boot-dev-gator register rover
-User created successfully!
- * ID:      55376e04-8fa4-4b9f-a0fb-b0ef07a331c7
- * Name:    rover
+>>> boot-dev-gator register <name>
 ```
 
-2. Add feed
+2. Add a feed
+
 ```bash
 >>> boot-dev-gator addfeed <name> <url>
 ```
-For example 
-```bash
->>> boot-dev-gator addfead "TechCrunch" "https://techcrunch.com/feed/"
+
+3. Start the aggregator 
+
+```
+>>> boot-dev-gator agg 30s
 ```
 
-3. Collect the posts from feeds
-```
->>> boot-dev-gator agg <time_between_reqs>
-```
+4. View the posts
 
-You can put 1s or 1m or 1h for time between reqs
-
-4. List the posts
 ```
->>> boot-dev-gator browse <limit>
+>>> boot-dev-gator browse [limit]
 ```
 
-## List of commands
+There are a few other commands you'll need as well:
 
-- users
-- addfeed <name> <url>
-- feeds
-- follow <url>
-- following
-- unfollow <url>
-- browse <limit>
-
+- `boot-dev-gator  login <name>`  - Log in as a user that already exists
+- `boot-dev-gator  users` - List all users
+- `boot-dev-gator  feeds` - List all feeds
+- `boot-dev-gator follow <url>` - Follow a feed that already exists in the database
+- `boot-dev-gator unfollow <url>` - Unfollow a feed that already exists in the database
+- `boot-dev-gator following` - List all the feeds that the current user is following
