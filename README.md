@@ -4,7 +4,7 @@
 
 ### 📋 Prerequisites
 
-- Go](https://go.dev/doc/install) 
+- [Go](https://go.dev/doc/install) 
 - [Postgres](https://www.postgresql.org/download/)
 
 ### 💾  Installation
@@ -14,7 +14,7 @@
 With go 1.25 or higher:
 
 ```bash
-go install github.com/Joe2918/boot-dev-gator@latest
+>>> go install github.com/Joe2918/boot-dev-gator@latest
 ```
 
 create a config file in your home directory, ~/.gatorconfig.json, with the following content:
@@ -36,18 +36,22 @@ User created successfully!
 
 2. Add feed
 ```bash
->>> boot-dev-gator addfeed "TechCrunch" "https://techcrunch.com/feed/"
+>>> boot-dev-gator addfeed <name> <url>
+```
+For example 
+```bash
+>>> boot-dev-gator addfead "TechCrunch" "https://techcrunch.com/feed/"
 ```
 
 3. Collect the posts from feeds
 ```
->>> boot-dev-gator agg 10s
-
+>>> boot-dev-gator agg <time_between_reqs>
+You can put 1s or 1m or 1h for time between reqs
 ```
 
 4. List the posts
 ```
->>> boot-dev-gator browse 1
+>>> boot-dev-gator browse <limit>
 ```
 
 
