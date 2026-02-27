@@ -1,4 +1,4 @@
-# Gator
+# gator
 
 ## Setup
 
@@ -46,15 +46,22 @@ For example
 3. Collect the posts from feeds
 ```
 >>> boot-dev-gator agg <time_between_reqs>
-You can put 1s or 1m or 1h for time between reqs
 ```
+
+You can put 1s or 1m or 1h for time between reqs
 
 4. List the posts
 ```
 >>> boot-dev-gator browse <limit>
 ```
 
+## List of commands
 
-
-
+- users
+- addfeed <name> <url>
+- feeds
+- follow <url>
+- following
+- unfollow <url>
+- browse <limit>
 
